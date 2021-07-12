@@ -44,6 +44,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download talib
+        run: |
+          curl -sLo ta-lib.tar.gz http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+          tar -xvzf ta-lib.tar.gz
+          sed -i.bak "s|0.00000001|0.000000000000000001 |g" src/ta_func/ta_utility.h
+          curl 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' -o config.guess
+          curl 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' -o config.sub
+
       - name: Build
         uses: docker/build-push-action@v2
         with:
@@ -52,3 +60,5 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7
           push: true
           tags: ${{ steps.data.outputs.docker_image }}
+          cache-from: type=gha
+          cache-to: type=gha

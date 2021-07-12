@@ -35,7 +35,8 @@ RUN cd /tmp/ta-lib && \
   make install
 
 COPY requirements.txt requirements-hyperopt.txt /freqtrade/
-RUN pip install --user --no-cache-dir -r requirements-hyperopt.txt
+RUN pip install --upgrade pip setuptools wheel \
+  && pip install --user --no-cache-dir -r requirements-hyperopt.txt
 
 FROM base as runtime-image
 

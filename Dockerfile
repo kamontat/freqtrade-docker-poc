@@ -25,7 +25,7 @@ FROM base as python-deps
 
 # Install compiler and development packages
 RUN apt-get update \
-  && apt-get -y install curl build-essential
+  && apt-get -y install curl build-essential libgfortran5 pkg-config
 
 # TA-Lib
 COPY ta-lib /tmp/ta-lib

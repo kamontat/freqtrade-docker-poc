@@ -13,7 +13,7 @@ ENV FT_APP_ENV="docker"
 # Prepare environment
 RUN mkdir /freqtrade \
   && apt-get update \
-  && apt-get install -y libatlas3-base sqlite3 libhdf5-dev
+  && apt-get install -y libatlas3-base sqlite3 libhdf5-serial-dev
 
 RUN apt-get clean \
   && apt-get autoclean -y \
@@ -25,7 +25,7 @@ FROM base as python-deps
 
 # Install compiler and development packages
 RUN apt-get update \
-  && apt-get -y install curl build-essential libssl-dev git libffi-dev libgfortran5 pkg-config cmake gcc
+  && apt-get -y install curl build-essential libssl-dev libffi-dev libgfortran5 pkg-config cmake gcc
 
 # TA-Lib
 COPY ta-lib /tmp/ta-lib

@@ -22,6 +22,7 @@ jobs:
 
       - name: Download talib
         run: |
+          cd freqtrade
           curl -sLo ta-lib.tar.gz http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
           tar -xvzf ta-lib.tar.gz
           sed -i.bak "s|0.00000001|0.000000000000000001 |g" ta-lib/src/ta_func/ta_utility.h

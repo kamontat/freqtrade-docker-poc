@@ -13,7 +13,7 @@ ENV FT_APP_ENV="docker"
 # Prepare environment
 RUN mkdir /freqtrade \
   && apt-get update \
-  && apt-get install -y libatlas3-base sqlite3 libhdf5-serial-dev
+  && apt-get install -y libatlas3-base sqlite3 libhdf5-dev libhdf5-serial-dev
 
 RUN apt-get clean \
   && apt-get autoclean -y \
@@ -35,8 +35,9 @@ RUN cd /tmp/ta-lib \
   && make install
 
 COPY requirements.txt requirements-hyperopt.txt /freqtrade/
-RUN pip install --user --no-cache-dir numpy \
-  && pip install --user --no-cache-dir -r requirements-hyperopt.txt
+RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf \
+  && pip install --user --no-cache-dir numpy \
+  && pip install --user --no-cache-dir -r requirements.txt
 
 FROM base as runtime-image
 

@@ -25,7 +25,7 @@ FROM base as python-deps
 
 # Install compiler and development packages
 RUN apt-get update \
-  && apt-get -y install curl build-essential libgfortran5 pkg-config cmake
+  && apt-get -y install curl build-essential libssl-dev git libffi-dev libgfortran5 pkg-config cmake gcc
 
 # TA-Lib
 COPY ta-lib /tmp/ta-lib
@@ -35,8 +35,7 @@ RUN cd /tmp/ta-lib && \
   make install
 
 COPY requirements.txt requirements-hyperopt.txt /freqtrade/
-RUN pip install --upgrade pip setuptools wheel \
-  && pip install --user --no-cache-dir -r requirements-hyperopt.txt
+RUN pip install --user --no-cache-dir -r requirements-hyperopt.txt
 
 FROM base as runtime-image
 

@@ -55,7 +55,7 @@ jobs:
           echo ::set-output name=docker_image::${NAME}
 
           # copy custom dockerfile to freqtrade
-          mv Dockerfile freqtrade/Dockerfile
+          # mv Dockerfile freqtrade/Dockerfile
 
       - name: Build
         uses: docker/build-push-action@v2

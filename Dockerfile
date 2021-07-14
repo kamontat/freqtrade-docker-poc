@@ -29,13 +29,13 @@ RUN apt-get update \
 
 # TA-Lib
 COPY ta-lib /tmp/ta-lib
-RUN cd /tmp/ta-lib && \
-  ./configure --prefix=/usr/local && \
-  make && \
-  make install
+RUN cd /tmp/ta-lib \
+  && ./configure --prefix=/usr/local \
+  && make \
+  && make install
 
 COPY requirements.txt requirements-hyperopt.txt /freqtrade/
-RUN pip install --user --no-cache-dir numpy 
+RUN pip install --user --no-cache-dir numpy \
   && pip install --user --no-cache-dir -r requirements-hyperopt.txt
 
 FROM base as runtime-image

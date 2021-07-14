@@ -23,10 +23,10 @@ jobs:
       - id: data
         name: Prepare docker data
         run: |
-          DOCKER_IMAGE=${{ github.actor }}/freqtrade_poc
+          DOCKER_IMAGE="${REGISTRY}/${{ github.actor }}/freqtrade_poc"
           NAME="${DOCKER_IMAGE}:${GITHUB_SHA::8}"
 
-          # Set output parameters.
+          echo "$NAME"
           echo ::set-output name=docker_image::${NAME}
       - name: Download talib
         run: |

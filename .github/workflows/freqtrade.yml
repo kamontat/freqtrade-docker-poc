@@ -20,14 +20,6 @@ jobs:
           repository: freqtrade/freqtrade
           path: freqtrade
 
-      - id: data
-        name: Prepare docker data
-        run: |
-          DOCKER_IMAGE="${REGISTRY}/${{ github.actor }}/freqtrade_poc"
-          NAME="${DOCKER_IMAGE}:${GITHUB_SHA::8}"
-
-          echo "$NAME"
-          echo ::set-output name=docker_image::${NAME}
       - name: Download talib
         run: |
           curl -sLo ta-lib.tar.gz http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
@@ -52,11 +44,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - id: data
+        name: Prepare docker data
+        run: |
+          DOCKER_IMAGE="${REGISTRY}/${{ github.actor }}/freqtrade_poc"
+          NAME="${DOCKER_IMAGE}:${GITHUB_SHA::8}"
+
+          echo "$NAME"
+          echo ::set-output name=docker_image::${NAME}
+
+          # copy custom dockerfile to freqtrade
+          mv Dockerfile freqtrade/Dockerfile
+
       - name: Build
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: Dockerfile
-          platforms: linux/amd64,linux/arm64
+          context: freqtrade
+          file: freqtrade/Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7
           push: true
           tags: ${{ steps.data.outputs.docker_image }}

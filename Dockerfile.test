@@ -1,0 +1,36 @@
+FROM python:3.9.6-slim-buster as base
+
+# Setup env
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONFAULTHANDLER 1
+ENV PATH=/root/.local/bin:$PATH
+ENV LD_LIBRARY_PATH /usr/local/lib
+
+ENV FT_APP_ENV="docker"
+
+# Prepare environment
+RUN mkdir /freqtrade \
+  && apt-get update \
+  && apt-get install -y libatlas3-base sqlite3 libhdf5-dev libhdf5-serial-dev
+
+# Add normal user
+RUN useradd -u 1000 -G sudo -U -m ftuser \
+  && chown ftuser:ftuser /freqtrade \
+  && echo "ftuser ALL=(ALL) NOPASSWD: /bin/chown" >> /etc/sudoers
+
+RUN apt-get clean \
+  && apt-get autoclean -y \
+  && apt-get autoremove -y
+
+WORKDIR /freqtrade
+
+FROM base as python-deps
+
+RUN apt-get -y install curl build-essential libssl-dev libffi-dev libgfortran5 pkg-config cmake gcc
+RUN pip install --upgrade pip
+
+RUN echo "[global]\nextra-index-url=https://www.piwheels.org/simple" > /etc/pip.conf
+RUN pip install --user --no-cache-dir numpy \
+  && pip install --user --no-cache-dir tables

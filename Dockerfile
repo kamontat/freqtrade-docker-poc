@@ -25,7 +25,8 @@ FROM base as python-deps
 
 # Install compiler and development packages
 RUN apt-get update \
-  && apt-get -y install curl build-essential libssl-dev libffi-dev libgfortran5 pkg-config cmake gcc
+  && apt-get -y install curl build-essential libssl-dev libffi-dev libgfortran5 pkg-config cmake gcc \
+  && pip install --upgrade pip
 
 # TA-Lib
 COPY ta-lib /tmp/ta-lib

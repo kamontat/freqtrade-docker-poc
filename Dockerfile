@@ -19,6 +19,7 @@ RUN apt-get clean \
   && apt-get autoclean -y \
   && apt-get autoremove -y
 
+USER ftuser
 WORKDIR /freqtrade
 
 FROM base as python-deps
